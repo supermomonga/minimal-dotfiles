@@ -12,7 +12,7 @@ bindkey "^N" history-beginning-search-forward-end
 # move without cd command
 setopt AUTO_CD
 
-zstyle :compinstall filename '/home/lvr/.zshrc'
+zstyle :compinstall filename "${HOME}/.zshrc"
 autoload -Uz compinit && compinit
 # pure
 autoload -U promptinit && promptinit
