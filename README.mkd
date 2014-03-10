@@ -2,3 +2,7 @@
 # how to use
 
 `curl https://raw.github.com/supermomonga/minimal-dotfiles/master/install.sh | sh`
+
+# Docker installer
+
+`curl https://raw.github.com/supermomonga/minimal-dotfiles/master/install_docker.sh | sh`
