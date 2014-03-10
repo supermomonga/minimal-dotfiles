@@ -23,3 +23,7 @@ sudo apt-get update
 echo "\n"
 echo "----------> Install the lxc-docker package"
 sudo apt-get install -y lxc-docker
+
+echo "\n"
+echo "Done! now try following command!"
+echo "sudo docker run -i -t ubuntu /bin/bash"
