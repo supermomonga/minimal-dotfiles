@@ -22,7 +22,8 @@ echo "\n"
 echo "----------> Install dependencies"
 sudo apt-get install -y \
   apache2 \
-  mysql \
+  vsftpd \
+  mysql-server \
   php5 \
   libapache2-mod-php5 \
   php5-mysql \
@@ -31,3 +32,22 @@ sudo apt-get install -y \
   php5-gd \
   php5-mhash \
   php5-curl
+
+echo "\n"
+echo "----------> Configure apache2 virtual hosts"
+
+echo "\n"
+echo "----------> Configure FTP/FTPS server"
+# uncomment /etc/vsftpd.conf
+#local_enable=YES
+#write_enable=YES
+
+#chroot_local_user=YES
+#chroot_list_enable=YES
+#chroot_list_file=/etc/vsftpd.chroot_list
+
+#ls_recurse_enable=YES
+
+#add following lines
+#local_root=sites
+#use_localtime=YES
