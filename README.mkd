@@ -6,3 +6,7 @@
 # Docker installer
 
 `curl https://raw.github.com/supermomonga/minimal-dotfiles/master/install_docker.sh | sh`
+
+# LAMP installer
+
+`curl https://raw.github.com/supermomonga/minimal-dotfiles/master/install_lamp.sh | sh`
