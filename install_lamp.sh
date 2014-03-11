@@ -21,6 +21,7 @@ sudo apt-get update
 echo "\n"
 echo "----------> Install dependencies"
 sudo apt-get install -y \
+  apache2 \
   mysql \
   php5 \
   libapache2-mod-php5 \
