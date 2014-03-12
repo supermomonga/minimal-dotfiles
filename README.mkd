@@ -3,14 +3,19 @@
 
 `curl https://raw.github.com/supermomonga/minimal-dotfiles/master/install.sh | sh`
 
-# Docker installer
+## Automatic installers
+
+Please note that using following scripts are NOT recommended.
+We'll replace those to Ansible playbooks in near future.
+
+### Docker installer
 
 `curl https://raw.github.com/supermomonga/minimal-dotfiles/master/install_docker.sh | sh`
 
-# LAMP installer
+### LAMP installer
 
 `curl https://raw.github.com/supermomonga/minimal-dotfiles/master/install_lamp.sh | sh`
 
-# EC CUBE installer
+### EC CUBE installer
 
 `curl https://raw.github.com/supermomonga/minimal-dotfiles/master/install_eccube.sh | sh`
