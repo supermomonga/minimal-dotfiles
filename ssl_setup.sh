@@ -1,3 +1,5 @@
+#!/bin/sh
+
 echo "Please input domain name:"
 read DOMAIN
 
