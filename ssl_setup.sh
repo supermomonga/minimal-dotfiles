@@ -1,8 +1,6 @@
-if [ $# -ne 1 ]; then
-  echo "Please pass the file name"
-  echo "e.g.) example.com"
-  exit 1
-fi
+echo "Please input domain name:"
+read DOMAIN
+
 
 cd /usr/share/ssl-cert/
 
@@ -12,7 +10,7 @@ openssl sha512 /usr/bin/* > rand.dat
 
 echo "\n"
 echo "----------> Make private key"
-openssl genrsa -rand ./rand.dat -des3 2048 -out $1.key
+openssl genrsa -rand ./rand.dat -des3 2048 -out $DOMAIN.key
 
 echo "\n"
 echo "----------> Make CSR"
@@ -26,7 +24,7 @@ echo "-> Common name    : example.com"
 echo "-> Email          : "
 echo "-> challenge pass : "
 echo "-> optional name  : "
-openssl req -new -key $1.key -out $1.csr
+openssl req -new -key $DOMAIN.key -out $DOMAIN.csr
 
 echo "\n"
 echo "----------> Done!"
