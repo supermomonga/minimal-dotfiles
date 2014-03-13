@@ -5,7 +5,7 @@ read DOMAIN
 
 
 cd /usr/share/ssl-cert/
-echo pwd
+pwd
 echo $DOMAIN
 
 echo "\n"
@@ -14,7 +14,7 @@ openssl sha512 /usr/bin/* > ./rand.dat
 
 echo "\n"
 echo "----------> Make private key"
-openssl genrsa -rand ./rand.dat -des3 2048 -out ./$DOMAIN.key
+openssl genrsa -rand ./rand.dat -des3 2048 > $DOMAIN.key
 
 echo "\n"
 echo "----------> Make CSR"
@@ -28,7 +28,7 @@ echo "-> Common name    : example.com"
 echo "-> Email          : "
 echo "-> challenge pass : "
 echo "-> optional name  : "
-openssl req -new -key ./$DOMAIN.key -out ./$DOMAIN.csr
+openssl req -new -key $DOMAIN.key -out $DOMAIN.csr
 
 echo "\n"
 echo "----------> Done!"
