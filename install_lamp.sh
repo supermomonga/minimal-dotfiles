@@ -24,8 +24,10 @@ sudo apt-get install -y \
   apache2 \
   vsftpd \
   mysql-server \
+  imagemagick \
   php5 \
   libapache2-mod-php5 \
+  php5-imagick \
   php5-mysql \
   php5-json \
   php5-mcrypt \
