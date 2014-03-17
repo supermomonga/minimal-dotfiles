@@ -5,7 +5,6 @@ read DOMAIN
 
 
 cd /usr/share/ssl-cert/
-pwd
 echo $DOMAIN
 
 echo "\n"
