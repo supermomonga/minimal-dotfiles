@@ -1,7 +1,6 @@
 #!/bin/sh
-sudo pwd
 
-echo "Please input domain name:"
+echo -n "Please input domain name:"
 read DOMAIN
 
 
