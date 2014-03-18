@@ -36,5 +36,10 @@ chmod -R o+w data/Smarty/templates_c
 chmod o+w public_html/
 chmod o+w data/config/
 
+echo "----------> Config .htaccess"
+sed -i -e "s/#php_value\spost_max_size\s[0-9]\+M/php_value post_max_size 10M/" ./public_html/.htaccess
+sed -i -e "s/php_value\supload_max_filesize\s[0-9]\+M/php_value upload_max_filesize 10M/" ./public_html/.htaccess
+
+
 
 
