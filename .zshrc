@@ -26,3 +26,10 @@ then
   export PATH="$HOME/.rbenv/bin:$PATH"
   eval "$(rbenv init -)"
 fi
+
+# vimenv
+if [ -d "$HOME/.vimenv" ]
+then
+  export PATH="$HOME/.vimenv/bin:$PATH"
+  eval "$(vimenv init -)"
+fi
