@@ -20,6 +20,10 @@ We'll replace those to Ansible playbooks in near future.
 
 `curl https://raw.github.com/supermomonga/minimal-dotfiles/master/install_eccube.sh | sh`
 
+### rbenv installer
+
+`curl https://raw.github.com/supermomonga/minimal-dotfiles/master/install_rbenv.sh | sh`
+
 ### SSL setup
 
 `curl https://raw.github.com/supermomonga/minimal-dotfiles/master/ssl_setup.sh | sh`
