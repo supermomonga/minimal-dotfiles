@@ -316,5 +316,6 @@ let g:textobj_multiblock_search_limit = 20
 
 
 " ========================================================================
-" 
+" Filetype plugin and indent on
 " ========================================================================
+filetype plugin indent on
