@@ -13,21 +13,28 @@ openssl sha512 /usr/bin/* > ./rand.dat
 
 echo "\n"
 echo "----------> Make private key"
-openssl genrsa -rand ./rand.dat -des3 2048 > $DOMAIN.key
+openssl genrsa -rand ./rand.dat -des3 2048 > $DOMAIN.private.key.encripted
+openssl rsa -in $DOMAIN.private.key.encripted -out $DOMAIN.private.key
 
 echo "\n"
 echo "----------> Make CSR"
 echo "-> e.g.)"
 echo "-> Country        : JP"
 echo "-> State          : Tokyo"
-echo "-> Locality name  : Chuo-Ku"
+echo "-> Locality name  : Otaku"
 echo "-> Org name       : My Comp.ltd"
 echo "-> Org unit name  : System"
 echo "-> Common name    : example.com"
-echo "-> Email          : "
+echo "-> Email          : admin@example.com"
 echo "-> challenge pass : "
 echo "-> optional name  : "
-openssl req -new -key $DOMAIN.key -out $DOMAIN.csr
+openssl req -new -key $DOMAIN.private.key -out $DOMAIN.csr
+
+echo "\n"
+echo "----------> Make empty public,intermediate crt files"
+touch $DOMAIN.public.crt
+touch $DOMAIN.intermediate.crt
+
 
 echo "\n"
 echo "----------> Done!"
