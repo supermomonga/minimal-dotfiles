@@ -6,7 +6,7 @@ sudo apt-get update && sudo apt-get upgrade
 
 echo "\n\n"
 echo "----------> Install common packages"
-sudo apt-get install -y git zsh lua liblua
+sudo apt-get install -y git zsh lua5.2
 
 echo "\n\n"
 echo "----------> Configuring zsh"
