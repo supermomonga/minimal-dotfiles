@@ -27,11 +27,11 @@ mkdir .vim/tmp/swap
 mkdir .vim/tmp/backup
 mkdir .vim/tmp/undo
 mkdir .vim/bundle
-git clone https://github.com:Shougo/neobundle.vim.git ./.vim/bundle/neobundle.vim
+git clone https://github.com/Shougo/neobundle.vim.git ./.vim/bundle/neobundle.vim
 
 echo "\n\n"
 echo "----------> Setup vimenv"
-git clone https://github.com:raa0121/vimenv.git .vimenv
+git clone https://github.com/raa0121/vimenv.git .vimenv
 
 echo "\n\n"
 echo "----------> Change shell"
