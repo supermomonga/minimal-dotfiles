@@ -10,7 +10,7 @@ sudo apt-get install -y git zsh lua5.2
 
 echo "\n\n"
 echo "----------> Configuring zsh"
-curl https://raw.github.com/sindresorhus/pure/master/pure.zsh > pure.zsh
+curl https://raw.githubusercontent.com/sindresorhus/pure/master/pure.zsh > pure.zsh
 sudo ln -s "$PWD/pure.zsh" /usr/local/share/zsh/site-functions/prompt_pure_setup
 
 echo "\n\n"
@@ -27,11 +27,11 @@ mkdir .vim/tmp/swap
 mkdir .vim/tmp/backup
 mkdir .vim/tmp/undo
 mkdir .vim/bundle
-git clone git@github.com:Shougo/neobundle.vim.git ./.vim/bundle/neobundle.vim
+git clone https://github.com:Shougo/neobundle.vim.git ./.vim/bundle/neobundle.vim
 
 echo "\n\n"
 echo "----------> Setup vimenv"
-git clone git@github.com:raa0121/vimenv.git .vimenv
+git clone https://github.com:raa0121/vimenv.git .vimenv
 
 echo "\n\n"
 echo "----------> Change shell"
