@@ -1,29 +1,4 @@
-
 # how to use
 
 `curl https://raw.githubusercontent.com/supermomonga/minimal-dotfiles/master/install.sh | sh`
 
-## Automatic installers
-
-Please note that using following scripts are NOT recommended.
-We'll replace those to Ansible playbooks in near future.
-
-### Docker installer
-
-`curl https://raw.githubusercontent.com/supermomonga/minimal-dotfiles/master/install_docker.sh | sh`
-
-### LAMP installer
-
-`curl https://raw.githubusercontent.com/supermomonga/minimal-dotfiles/master/install_lamp.sh | sh`
-
-### EC CUBE installer
-
-`curl https://raw.githubusercontent.com/supermomonga/minimal-dotfiles/master/install_eccube.sh | sh`
-
-### rbenv installer
-
-`curl https://raw.githubusercontent.com/supermomonga/minimal-dotfiles/master/install_rbenv.sh | sh`
-
-### SSL setup
-
-`curl https://raw.githubusercontent.com/supermomonga/minimal-dotfiles/master/ssl_setup.sh | sh`

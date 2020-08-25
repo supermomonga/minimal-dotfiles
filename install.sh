@@ -2,38 +2,27 @@ cd ~/
 
 echo "\n\n"
 echo "----------> Update packages"
-sudo apt-get update && sudo apt-get upgrade
+sudo apt update && sudo apt upgrade -y
 
 echo "\n\n"
 echo "----------> Install common packages"
-sudo apt-get install -y git zsh lua5.2
+sudo apt install -y build-essential sqlite3 libsqlite3-dev git unzip
+sudo apt install -y autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev libdb-dev
 
 echo "\n\n"
-echo "----------> Configuring zsh"
-curl https://raw.githubusercontent.com/sindresorhus/pure/master/pure.zsh > pure.zsh
-sudo ln -s "$PWD/pure.zsh" /usr/local/share/zsh/site-functions/prompt_pure_setup
+echo "----------> Configuring bash"
+echo 'eval "$(direnv hook bash)"' >> ~/.bash_profile
+echo 'shopt -s autocd' >> ~/.bash_profile
+echo 'shopt -s dotglob' >> ~/.bash_profile
+echo 'test -r ~/.bashrc && . ~/.bashrc' >> ~/.bash_profile
+echo 'export EDITOR=vim' >> ~/.bash_profile
+echo 'alias tn="tmux new -s main"' >> ~/.bash_profile
+echo 'alias ta="tmux a -t main"' >> ~/.bash_profile
+echo 'alias rl="source ~/.bashrc; source ~/.bash_profile"' >> ~/.bash_profile
 
 echo "\n\n"
 echo "----------> Install dotfiles"
 git clone https://github.com/supermomonga/minimal-dotfiles.git dotfiles
-ln -s ./dotfiles/.zshrc ./.zshrc
 ln -s ./dotfiles/.vimrc ./.vimrc
-
-echo "\n\n"
-echo "----------> Setup .vim"
-mkdir .vim
-mkdir .vim/tmp
-mkdir .vim/tmp/swap
-mkdir .vim/tmp/backup
-mkdir .vim/tmp/undo
-mkdir .vim/bundle
-git clone https://github.com/Shougo/neobundle.vim.git ./.vim/bundle/neobundle.vim
-
-echo "\n\n"
-echo "----------> Setup vimenv"
-git clone https://github.com/raa0121/vimenv.git .vimenv
-
-echo "\n\n"
-echo "----------> Change shell"
-chsh -s /usr/bin/zsh
-source ./.zshrc
+ln -s ./dotfiles/.tmux.conf ./.tmux.conf
+ln -s ./dotfiles/.inputrc ./.inputrc
