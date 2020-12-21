@@ -23,6 +23,6 @@ echo 'alias rl="source ~/.bashrc; source ~/.bash_profile"' >> ~/.bash_profile
 echo "\n\n"
 echo "----------> Install dotfiles"
 git clone https://github.com/supermomonga/minimal-dotfiles.git dotfiles
-cp ./dotfiles/.vimrc ./.vimrc
-cp ./dotfiles/.tmux.conf ./.tmux.conf
-cp ./dotfiles/.inputrc ./.inputrc
+ln -s ./dotfiles/.vimrc ./.vimrc
+ln -s ./dotfiles/.tmux.conf ./.tmux.conf
+ln -s ./dotfiles/.inputrc ./.inputrc
