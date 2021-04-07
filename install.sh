@@ -26,3 +26,8 @@ git clone https://github.com/supermomonga/minimal-dotfiles.git dotfiles
 ln -s ./dotfiles/.vimrc ./.vimrc
 ln -s ./dotfiles/.tmux.conf ./.tmux.conf
 ln -s ./dotfiles/.inputrc ./.inputrc
+
+echo "\n\n"
+echo "----------> Install starship"
+curl -fsSL https://starship.rs/install.sh | bash
+echo 'eval "$(starship init bash)"' >> ~/.bashrc
