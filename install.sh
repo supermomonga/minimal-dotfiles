@@ -31,3 +31,12 @@ echo "\n\n"
 echo "----------> Install starship"
 curl -fsSL https://starship.rs/install.sh | bash
 echo 'eval "$(starship init bash)"' >> ~/.bashrc
+
+echo "\n\n"
+echo "----------> Install asdf-vm"
+sudo apt install curl git -y
+git clone https://github.com/asdf-vm/asdf.git ~/.asdf
+cd ~/.asdf
+git checkout "$(git describe --abbrev=0 --tags)"
+echo ". \$HOME/.asdf/asdf.sh" >> ~/.bashrc
+echo ". \$HOME/.asdf/completions/asdf.bash" >> ~/.bashrc
