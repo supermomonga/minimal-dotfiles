@@ -10,4 +10,4 @@ asdf global python latest
 asdf plugin-add poetry https://github.com/asdf-community/asdf-poetry.git
 asdf install poetry latest
 asdf global poetry latest
-poetry config --local virtualenvs.in-project true
+poetry config virtualenvs.in-project true
