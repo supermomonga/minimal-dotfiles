@@ -7,7 +7,7 @@ sudo apt update && sudo apt upgrade -y
 echo "\n\n"
 echo "----------> Install common packages"
 sudo apt install -y build-essential sqlite3 libsqlite3-dev git unzip
-sudo apt install -y autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev libdb-dev
+sudo apt install -y autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev libdb-dev direnv
 
 echo "\n\n"
 echo "----------> Configuring bash"
