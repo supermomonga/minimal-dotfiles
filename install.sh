@@ -109,6 +109,34 @@ ln -sf ~/dotfiles/.tmux.conf ~/.tmux.conf
 ln -sf ~/dotfiles/.inputrc ~/.inputrc
 
 echo ""
+echo "----------> Setup authorized_keys"
+if [ -z "$PUBLIC_KEY" ]; then
+    echo "            Paste your public key (single line), then press Enter:"
+    printf "            > "
+    read -r PUBLIC_KEY
+fi
+if [ -n "$PUBLIC_KEY" ]; then
+    mkdir -p ~/.ssh
+    chmod 700 ~/.ssh
+    echo "$PUBLIC_KEY" > ~/.ssh/authorized_keys
+    chmod 600 ~/.ssh/authorized_keys
+    echo "            (authorized_keys written)"
+else
+    echo "            WARNING: No key provided. Skipping authorized_keys setup."
+fi
+
+echo ""
+echo "----------> Disable sshd password authentication"
+sudo sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config
+sudo sed -i 's/^#\?KbdInteractiveAuthentication.*/KbdInteractiveAuthentication no/' /etc/ssh/sshd_config
+if command -v systemctl >/dev/null 2>&1; then
+    sudo systemctl restart sshd || sudo systemctl restart ssh || true
+else
+    sudo service ssh restart || true
+fi
+echo "            (password authentication disabled)"
+
+echo ""
 echo "----------> Install mise"
 if ! command -v mise >/dev/null 2>&1 && [ ! -x ~/.local/bin/mise ]; then
     curl https://mise.run | sh

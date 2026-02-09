@@ -15,6 +15,7 @@ docker run --rm "$IMAGE_NAME" sh -c '
   set -e
 
   echo "--- Running install.sh as root ---"
+  PUBLIC_KEY="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAItest testkey" \
   sh /workspace/install.sh testuser
 
   echo ""
@@ -36,6 +37,16 @@ docker run --rm "$IMAGE_NAME" sh -c '
   echo "--- Verifying .bash_profile ---"
   su - testuser -c "grep -q autocd ~/.bash_profile"
   su - testuser -c "grep -q EDITOR=vim ~/.bash_profile"
+
+  echo ""
+  echo "--- Verifying authorized_keys ---"
+  su - testuser -c "test -f ~/.ssh/authorized_keys"
+  su - testuser -c "grep -q ssh-ed25519 ~/.ssh/authorized_keys"
+
+  echo ""
+  echo "--- Verifying sshd password auth disabled ---"
+  grep -q "^PasswordAuthentication no" /etc/ssh/sshd_config
+  grep -q "^KbdInteractiveAuthentication no" /etc/ssh/sshd_config
 
   echo ""
   echo "--- Verifying mise ---"
