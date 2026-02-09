@@ -15,7 +15,6 @@ docker run --rm "$IMAGE_NAME" sh -c '
   set -e
 
   echo "--- Running install.sh as root ---"
-  PUBLIC_KEY="ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAItest testkey" \
   sh /workspace/install.sh testuser
 
   echo ""

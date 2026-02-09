@@ -51,14 +51,6 @@ if [ "$(id -u)" -eq 0 ]; then
     fi
 
     echo ""
-    echo "----------> Collecting SSH public key"
-    if [ -z "$PUBLIC_KEY" ]; then
-        echo "            Paste your public key (single line), then press Enter:"
-        printf "            > "
-        read -r PUBLIC_KEY
-    fi
-
-    echo ""
     echo "----------> Re-running script as $USERNAME for personal setup"
     SELF="$(readlink -f "$0" 2>/dev/null || true)"
     if [ -f "$SELF" ]; then
@@ -67,7 +59,7 @@ if [ "$(id -u)" -eq 0 ]; then
         curl -fsSL "$REPO_URL" -o /tmp/_install.sh
     fi
     chmod +r /tmp/_install.sh
-    su - "$USERNAME" -c "PUBLIC_KEY='$PUBLIC_KEY' sh /tmp/_install.sh"
+    su - "$USERNAME" -c "sh /tmp/_install.sh"
     rm -f /tmp/_install.sh
 
     echo ""
@@ -118,15 +110,11 @@ ln -sf ~/dotfiles/.inputrc ~/.inputrc
 
 echo ""
 echo "----------> Setup authorized_keys"
-if [ -n "$PUBLIC_KEY" ]; then
-    mkdir -p ~/.ssh
-    chmod 700 ~/.ssh
-    echo "$PUBLIC_KEY" > ~/.ssh/authorized_keys
-    chmod 600 ~/.ssh/authorized_keys
-    echo "            (authorized_keys written)"
-else
-    echo "            WARNING: No key provided. Skipping authorized_keys setup."
-fi
+mkdir -p ~/.ssh
+chmod 700 ~/.ssh
+curl -fsSL https://github.com/supermomonga.keys -o ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+echo "            (authorized_keys written)"
 
 echo ""
 echo "----------> Disable sshd password authentication"
