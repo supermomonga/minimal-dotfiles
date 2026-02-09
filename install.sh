@@ -26,12 +26,9 @@ if [ "$(id -u)" -eq 0 ]; then
     chmod 0440 /etc/sudoers.d/sudo-nopasswd
 
     echo ""
-    echo "----------> Setting default editor to vim.basic"
-    update-alternatives --set editor /usr/bin/vim.basic
-
-    echo ""
     echo "----------> Re-running script as $USERNAME for personal setup"
-    su - "$USERNAME" -c "curl -fsSL $REPO_URL | sh"
+    SELF="$(readlink -f "$0")"
+    su - "$USERNAME" -c "sh '$SELF'"
 
     echo ""
     echo "=========> Done! Log in as $USERNAME to get started."
@@ -50,11 +47,14 @@ sudo apt update && sudo apt upgrade -y
 
 echo ""
 echo "----------> Install common packages"
-sudo apt install -y git unzip curl
+sudo apt install -y git unzip curl vim
+
+echo ""
+echo "----------> Setting default editor to vim.basic"
+sudo update-alternatives --set editor /usr/bin/vim.basic
 
 echo ""
 echo "----------> Configuring bash"
-echo 'eval "$(direnv hook bash)"' >> ~/.bash_profile
 echo 'shopt -s autocd' >> ~/.bash_profile
 echo 'shopt -s dotglob' >> ~/.bash_profile
 echo 'test -r ~/.bashrc && . ~/.bashrc' >> ~/.bash_profile
@@ -75,7 +75,7 @@ echo "----------> Install mise"
 curl https://mise.run | sh
 echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc
 mkdir -p ~/.local/share/bash-completion/completions/
-mise completion bash --include-bash-completion-lib > ~/.local/share/bash-completion/completions/mise
+~/.local/bin/mise completion bash --include-bash-completion-lib > ~/.local/share/bash-completion/completions/mise
 
 echo ""
 echo "----------> Setup complete!"
