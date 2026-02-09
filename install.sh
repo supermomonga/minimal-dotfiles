@@ -71,12 +71,12 @@ ln -s ./dotfiles/.tmux.conf ./.tmux.conf
 ln -s ./dotfiles/.inputrc ./.inputrc
 
 echo ""
-echo "----------> Install asdf-vm"
-git clone https://github.com/asdf-vm/asdf.git ~/.asdf
-cd ~/.asdf
-git checkout "$(git describe --abbrev=0 --tags)"
-echo ". \$HOME/.asdf/asdf.sh" >> ~/.bashrc
-echo ". \$HOME/.asdf/completions/asdf.bash" >> ~/.bashrc
+echo "----------> Install mise"
+curl https://mise.run | sh
+echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc
+mkdir -p ~/.local/share/bash-completion/completions/
+mise completion bash --include-bash-completion-lib > ~/.local/share/bash-completion/completions/mise
 
 echo ""
 echo "----------> Setup complete!"
+
