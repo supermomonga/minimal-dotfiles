@@ -1,15 +1,58 @@
+#!/bin/sh
+set -e
+
+REPO_URL="https://raw.githubusercontent.com/supermomonga/minimal-dotfiles/master/install.sh"
+
+# ============================================================
+# Root mode: system provisioning
+# ============================================================
+if [ "$(id -u)" -eq 0 ]; then
+    USERNAME="${1:-main}"
+
+    echo ""
+    echo "=========> Running as root. Setting up user: $USERNAME"
+
+    echo ""
+    echo "----------> Creating user"
+    adduser "$USERNAME"
+
+    echo ""
+    echo "----------> Adding user to sudo group"
+    gpasswd -a "$USERNAME" sudo
+
+    echo ""
+    echo "----------> Configuring passwordless sudo for sudo group"
+    echo '%sudo   ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/sudo-nopasswd
+    chmod 0440 /etc/sudoers.d/sudo-nopasswd
+
+    echo ""
+    echo "----------> Setting default editor to vim.basic"
+    update-alternatives --set editor /usr/bin/vim.basic
+
+    echo ""
+    echo "----------> Re-running script as $USERNAME for personal setup"
+    su - "$USERNAME" -c "curl -fsSL $REPO_URL | sh"
+
+    echo ""
+    echo "=========> Done! Log in as $USERNAME to get started."
+    exit 0
+fi
+
+# ============================================================
+# Non-root mode: personal environment setup
+# ============================================================
+
 cd ~/
 
-echo "\n\n"
+echo ""
 echo "----------> Update packages"
 sudo apt update && sudo apt upgrade -y
 
-echo "\n\n"
+echo ""
 echo "----------> Install common packages"
-sudo apt install -y build-essential sqlite3 libsqlite3-dev git unzip
-sudo apt install -y autoconf bison build-essential libssl-dev libyaml-dev libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm6 libgdbm-dev libdb-dev direnv
+sudo apt install -y git unzip curl
 
-echo "\n\n"
+echo ""
 echo "----------> Configuring bash"
 echo 'eval "$(direnv hook bash)"' >> ~/.bash_profile
 echo 'shopt -s autocd' >> ~/.bash_profile
@@ -20,23 +63,20 @@ echo 'alias tn="tmux new -s main"' >> ~/.bash_profile
 echo 'alias ta="tmux a -t main"' >> ~/.bash_profile
 echo 'alias rl="source ~/.bashrc; source ~/.bash_profile"' >> ~/.bash_profile
 
-echo "\n\n"
+echo ""
 echo "----------> Install dotfiles"
 git clone https://github.com/supermomonga/minimal-dotfiles.git dotfiles
 ln -s ./dotfiles/.vimrc ./.vimrc
 ln -s ./dotfiles/.tmux.conf ./.tmux.conf
 ln -s ./dotfiles/.inputrc ./.inputrc
 
-echo "\n\n"
-echo "----------> Install starship"
-curl -fsSL https://starship.rs/install.sh | bash
-echo 'eval "$(starship init bash)"' >> ~/.bashrc
-
-echo "\n\n"
+echo ""
 echo "----------> Install asdf-vm"
-sudo apt install curl git -y
 git clone https://github.com/asdf-vm/asdf.git ~/.asdf
 cd ~/.asdf
 git checkout "$(git describe --abbrev=0 --tags)"
 echo ". \$HOME/.asdf/asdf.sh" >> ~/.bashrc
 echo ". \$HOME/.asdf/completions/asdf.bash" >> ~/.bashrc
+
+echo ""
+echo "----------> Setup complete!"

@@ -1,3 +1,0 @@
-
-adduser main
-gpasswd -a main sudo
