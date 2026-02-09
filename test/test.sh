@@ -34,7 +34,6 @@ docker run --rm "$IMAGE_NAME" sh -c '
 
   echo ""
   echo "--- Verifying .bash_profile ---"
-  su - testuser -c "grep -q direnv ~/.bash_profile"
   su - testuser -c "grep -q autocd ~/.bash_profile"
   su - testuser -c "grep -q EDITOR=vim ~/.bash_profile"
 

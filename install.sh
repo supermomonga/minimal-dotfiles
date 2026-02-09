@@ -13,8 +13,12 @@ if [ "$(id -u)" -eq 0 ]; then
     echo "=========> Running as root. Setting up user: $USERNAME"
 
     echo ""
+    echo "----------> Installing sudo"
+    apt-get update && apt-get install -y sudo
+
+    echo ""
     echo "----------> Creating user"
-    adduser "$USERNAME"
+    useradd -m -s /bin/bash "$USERNAME"
 
     echo ""
     echo "----------> Adding user to sudo group"
