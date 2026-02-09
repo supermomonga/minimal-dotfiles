@@ -15,3 +15,11 @@ If no username is provided, defaults to `main`.
 ```
 curl -fsSL https://raw.githubusercontent.com/supermomonga/minimal-dotfiles/master/install.sh | sh
 ```
+
+## Enable sudoer (as root)
+
+Adds the current user to the sudo group and configures passwordless sudo. Useful when `install.sh` was run directly as a non-root user:
+
+```
+curl -fsSL https://raw.githubusercontent.com/supermomonga/minimal-dotfiles/master/enable_sudoer.sh | sudo sh
+```
