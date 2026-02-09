@@ -43,9 +43,10 @@ docker run --rm "$IMAGE_NAME" sh -c '
   su - testuser -c "grep -q ssh-ed25519 ~/.ssh/authorized_keys"
 
   echo ""
-  echo "--- Verifying sshd password auth disabled ---"
+  echo "--- Verifying sshd password auth and root login disabled ---"
   grep -q "^PasswordAuthentication no" /etc/ssh/sshd_config
   grep -q "^KbdInteractiveAuthentication no" /etc/ssh/sshd_config
+  grep -q "^PermitRootLogin no" /etc/ssh/sshd_config
 
   echo ""
   echo "--- Verifying mise ---"

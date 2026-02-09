@@ -117,15 +117,25 @@ chmod 600 ~/.ssh/authorized_keys
 echo "            (authorized_keys written)"
 
 echo ""
-echo "----------> Disable sshd password authentication"
+echo "----------> Disable sshd password authentication and root login"
 sudo sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config
 sudo sed -i 's/^#\?KbdInteractiveAuthentication.*/KbdInteractiveAuthentication no/' /etc/ssh/sshd_config
+sudo sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
 if command -v systemctl >/dev/null 2>&1; then
-    sudo systemctl restart sshd || sudo systemctl restart ssh || true
+    sudo systemctl restart ssh || true
 else
     sudo service ssh restart || true
 fi
-echo "            (password authentication disabled)"
+echo "            (password authentication and root login disabled)"
+
+echo ""
+echo "----------> Configure ufw"
+sudo apt install -y ufw
+sudo ufw allow ssh
+sudo ufw default deny incoming
+sudo ufw default allow outgoing
+yes | sudo ufw enable
+echo "            (ufw configured)"
 
 echo ""
 echo "----------> Install mise"
