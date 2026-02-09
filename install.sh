@@ -74,12 +74,20 @@ fi
 cd ~/
 
 echo ""
-echo "----------> Update packages"
-sudo apt update && sudo apt upgrade -y
-
-echo ""
 echo "----------> Install common packages"
-sudo apt install -y git unzip curl vim
+NEED_INSTALL=""
+for cmd in git unzip curl vim; do
+    if ! command -v "$cmd" >/dev/null 2>&1; then
+        NEED_INSTALL=1
+        break
+    fi
+done
+if [ -n "$NEED_INSTALL" ]; then
+    sudo apt update && sudo apt upgrade -y
+    sudo apt install -y git unzip curl vim
+else
+    echo "            (all packages already installed)"
+fi
 
 echo ""
 echo "----------> Setting default editor to vim.basic"
