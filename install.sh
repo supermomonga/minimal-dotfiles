@@ -3,6 +3,11 @@ set -e
 
 REPO_URL="https://raw.githubusercontent.com/supermomonga/minimal-dotfiles/master/install.sh"
 
+# Helper: append a line to a file only if it's not already present
+ensure_line() {
+    grep -qxF "$1" "$2" 2>/dev/null || echo "$1" >> "$2"
+}
+
 # ============================================================
 # Root mode: system provisioning
 # ============================================================
@@ -14,20 +19,36 @@ if [ "$(id -u)" -eq 0 ]; then
 
     echo ""
     echo "----------> Installing sudo"
-    apt-get update && apt-get install -y sudo
+    if ! command -v sudo >/dev/null 2>&1; then
+        apt install -y sudo
+    else
+        echo "            (already installed)"
+    fi
 
     echo ""
     echo "----------> Creating user"
-    useradd -m -s /bin/bash "$USERNAME"
+    if ! id "$USERNAME" >/dev/null 2>&1; then
+        useradd -m -s /bin/bash "$USERNAME"
+    else
+        echo "            (user $USERNAME already exists)"
+    fi
 
     echo ""
     echo "----------> Adding user to sudo group"
-    gpasswd -a "$USERNAME" sudo
+    if ! id -nG "$USERNAME" | grep -qw sudo; then
+        gpasswd -a "$USERNAME" sudo
+    else
+        echo "            (already in sudo group)"
+    fi
 
     echo ""
     echo "----------> Configuring passwordless sudo for sudo group"
-    echo '%sudo   ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/sudo-nopasswd
-    chmod 0440 /etc/sudoers.d/sudo-nopasswd
+    if [ ! -f /etc/sudoers.d/sudo-nopasswd ]; then
+        echo '%sudo   ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/sudo-nopasswd
+        chmod 0440 /etc/sudoers.d/sudo-nopasswd
+    else
+        echo "            (already configured)"
+    fi
 
     echo ""
     echo "----------> Re-running script as $USERNAME for personal setup"
@@ -59,25 +80,35 @@ sudo update-alternatives --set editor /usr/bin/vim.basic
 
 echo ""
 echo "----------> Configuring bash"
-echo 'shopt -s autocd' >> ~/.bash_profile
-echo 'shopt -s dotglob' >> ~/.bash_profile
-echo 'test -r ~/.bashrc && . ~/.bashrc' >> ~/.bash_profile
-echo 'export EDITOR=vim' >> ~/.bash_profile
-echo 'alias tn="tmux new -s main"' >> ~/.bash_profile
-echo 'alias ta="tmux a -t main"' >> ~/.bash_profile
-echo 'alias rl="source ~/.bashrc; source ~/.bash_profile"' >> ~/.bash_profile
+ensure_line 'shopt -s autocd' ~/.bash_profile
+ensure_line 'shopt -s dotglob' ~/.bash_profile
+ensure_line 'test -r ~/.bashrc && . ~/.bashrc' ~/.bash_profile
+ensure_line 'export EDITOR=vim' ~/.bash_profile
+ensure_line 'alias tn="tmux new -s main"' ~/.bash_profile
+ensure_line 'alias ta="tmux a -t main"' ~/.bash_profile
+ensure_line 'alias rl="source ~/.bashrc; source ~/.bash_profile"' ~/.bash_profile
 
 echo ""
 echo "----------> Install dotfiles"
-git clone https://github.com/supermomonga/minimal-dotfiles.git dotfiles
-ln -s ./dotfiles/.vimrc ./.vimrc
-ln -s ./dotfiles/.tmux.conf ./.tmux.conf
-ln -s ./dotfiles/.inputrc ./.inputrc
+if [ ! -d ~/dotfiles ]; then
+    git clone https://github.com/supermomonga/minimal-dotfiles.git ~/dotfiles
+else
+    echo "            (~/dotfiles already exists, pulling latest)"
+    git -C ~/dotfiles fetch origin
+    git -C ~/dotfiles reset --hard origin/master
+fi
+ln -sf ~/dotfiles/.vimrc ~/.vimrc
+ln -sf ~/dotfiles/.tmux.conf ~/.tmux.conf
+ln -sf ~/dotfiles/.inputrc ~/.inputrc
 
 echo ""
 echo "----------> Install mise"
-curl https://mise.run | sh
-echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc
+if ! command -v mise >/dev/null 2>&1 && [ ! -x ~/.local/bin/mise ]; then
+    curl https://mise.run | sh
+else
+    echo "            (already installed)"
+fi
+ensure_line 'eval "$(~/.local/bin/mise activate bash)"' ~/.bashrc
 mkdir -p ~/.local/share/bash-completion/completions/
 ~/.local/bin/mise completion bash --include-bash-completion-lib > ~/.local/share/bash-completion/completions/mise
 
