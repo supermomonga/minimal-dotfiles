@@ -52,8 +52,15 @@ if [ "$(id -u)" -eq 0 ]; then
 
     echo ""
     echo "----------> Re-running script as $USERNAME for personal setup"
-    SELF="$(readlink -f "$0")"
-    su - "$USERNAME" -c "sh '$SELF'"
+    SELF="$(readlink -f "$0" 2>/dev/null || true)"
+    if [ -f "$SELF" ]; then
+        cp "$SELF" /tmp/_install.sh
+    else
+        curl -fsSL "$REPO_URL" -o /tmp/_install.sh
+    fi
+    chmod +r /tmp/_install.sh
+    su - "$USERNAME" -c "sh /tmp/_install.sh"
+    rm -f /tmp/_install.sh
 
     echo ""
     echo "=========> Done! Log in as $USERNAME to get started."
