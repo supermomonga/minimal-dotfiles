@@ -12,7 +12,7 @@ ensure_line() {
 # Root mode: system provisioning
 # ============================================================
 if [ "$(id -u)" -eq 0 ]; then
-    USERNAME="${1:-main}"
+    USERNAME="${1:-$(whoami)}"
 
     echo ""
     echo "=========> Running as root. Setting up user: $USERNAME"
