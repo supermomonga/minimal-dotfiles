@@ -60,7 +60,7 @@ if [ "$(id -u)" -eq 0 ]; then
             curl -fsSL "$REPO_URL" -o /tmp/_install.sh
         fi
         chmod +r /tmp/_install.sh
-        su - "$USERNAME" -c "bash /tmp/_install.sh"
+        su - "$USERNAME" -c "SETUP_BY_ROOT=1 bash /tmp/_install.sh"
         rm -f /tmp/_install.sh
 
         echo ""
@@ -133,7 +133,7 @@ echo ""
 echo "----------> Configure sshd"
 sudo sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config
 sudo sed -i 's/^#\?KbdInteractiveAuthentication.*/KbdInteractiveAuthentication no/' /etc/ssh/sshd_config
-if [ "$(id -u)" -eq 0 ]; then
+if [ "$(id -u)" -eq 0 ] || [ "${SETUP_BY_ROOT:-}" = "1" ]; then
     sudo sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config
 else
     sudo sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
@@ -143,7 +143,7 @@ if command -v systemctl >/dev/null 2>&1; then
 else
     sudo service ssh restart || true
 fi
-if [ "$(id -u)" -eq 0 ]; then
+if [ "$(id -u)" -eq 0 ] || [ "${SETUP_BY_ROOT:-}" = "1" ]; then
     echo "            (password authentication disabled, root login enabled)"
 else
     echo "            (password authentication and root login disabled)"
