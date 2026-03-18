@@ -133,6 +133,7 @@ echo ""
 echo "----------> Configure sshd"
 sudo sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config
 sudo sed -i 's/^#\?KbdInteractiveAuthentication.*/KbdInteractiveAuthentication no/' /etc/ssh/sshd_config
+sudo sed -i 's/^#\?UsePAM.*/UsePAM no/' /etc/ssh/sshd_config
 if [ "$(id -u)" -eq 0 ]; then
     sudo sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config
 else
@@ -144,10 +145,30 @@ else
     sudo service ssh restart || true
 fi
 if [ "$(id -u)" -eq 0 ]; then
-    echo "            (password authentication disabled, root login enabled)"
+    echo "            (password authentication and PAM disabled, root login enabled)"
 else
-    echo "            (password authentication and root login disabled)"
+    echo "            (password authentication, PAM, and root login disabled)"
 fi
+
+echo ""
+echo "----------> Install and configure fail2ban"
+sudo apt install -y fail2ban
+sudo tee /etc/fail2ban/jail.local > /dev/null <<'JAIL'
+[sshd]
+enabled = true
+mode = aggressive
+port = ssh
+maxretry = 3
+findtime = 600
+bantime = 3600
+JAIL
+if command -v systemctl >/dev/null 2>&1; then
+    sudo systemctl enable fail2ban
+    sudo systemctl restart fail2ban || true
+else
+    sudo service fail2ban restart || true
+fi
+echo "            (fail2ban configured with aggressive SSH mode)"
 
 echo ""
 echo "----------> Configure ufw"
