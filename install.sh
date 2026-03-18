@@ -25,46 +25,51 @@ if [ "$(id -u)" -eq 0 ]; then
         echo "            (already installed)"
     fi
 
-    echo ""
-    echo "----------> Creating user"
-    if ! id "$USERNAME" >/dev/null 2>&1; then
-        useradd -m -s /bin/bash "$USERNAME"
-    else
-        echo "            (user $USERNAME already exists)"
+    if [ "$USERNAME" != "root" ]; then
+        echo ""
+        echo "----------> Creating user"
+        if ! id "$USERNAME" >/dev/null 2>&1; then
+            useradd -m -s /bin/bash "$USERNAME"
+        else
+            echo "            (user $USERNAME already exists)"
+        fi
+
+        echo ""
+        echo "----------> Adding user to sudo group"
+        if ! id -nG "$USERNAME" | grep -qw sudo; then
+            gpasswd -a "$USERNAME" sudo
+        else
+            echo "            (already in sudo group)"
+        fi
+
+        echo ""
+        echo "----------> Configuring passwordless sudo for sudo group"
+        if [ ! -f /etc/sudoers.d/sudo-nopasswd ]; then
+            echo '%sudo   ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/sudo-nopasswd
+            chmod 0440 /etc/sudoers.d/sudo-nopasswd
+        else
+            echo "            (already configured)"
+        fi
+
+        echo ""
+        echo "----------> Re-running script as $USERNAME for personal setup"
+        SELF="$(readlink -f "$0" 2>/dev/null || true)"
+        if [ -f "$SELF" ]; then
+            cp "$SELF" /tmp/_install.sh
+        else
+            curl -fsSL "$REPO_URL" -o /tmp/_install.sh
+        fi
+        chmod +r /tmp/_install.sh
+        su - "$USERNAME" -c "sh /tmp/_install.sh"
+        rm -f /tmp/_install.sh
+
+        echo ""
+        echo "=========> Done! Log in as $USERNAME to get started."
+        exit 0
     fi
 
     echo ""
-    echo "----------> Adding user to sudo group"
-    if ! id -nG "$USERNAME" | grep -qw sudo; then
-        gpasswd -a "$USERNAME" sudo
-    else
-        echo "            (already in sudo group)"
-    fi
-
-    echo ""
-    echo "----------> Configuring passwordless sudo for sudo group"
-    if [ ! -f /etc/sudoers.d/sudo-nopasswd ]; then
-        echo '%sudo   ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/sudo-nopasswd
-        chmod 0440 /etc/sudoers.d/sudo-nopasswd
-    else
-        echo "            (already configured)"
-    fi
-
-    echo ""
-    echo "----------> Re-running script as $USERNAME for personal setup"
-    SELF="$(readlink -f "$0" 2>/dev/null || true)"
-    if [ -f "$SELF" ]; then
-        cp "$SELF" /tmp/_install.sh
-    else
-        curl -fsSL "$REPO_URL" -o /tmp/_install.sh
-    fi
-    chmod +r /tmp/_install.sh
-    su - "$USERNAME" -c "sh /tmp/_install.sh"
-    rm -f /tmp/_install.sh
-
-    echo ""
-    echo "=========> Done! Log in as $USERNAME to get started."
-    exit 0
+    echo "----------> Setting up root environment directly"
 fi
 
 # ============================================================
@@ -125,16 +130,24 @@ chmod 600 ~/.ssh/authorized_keys
 echo "            (authorized_keys written)"
 
 echo ""
-echo "----------> Disable sshd password authentication and root login"
+echo "----------> Configure sshd"
 sudo sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config
 sudo sed -i 's/^#\?KbdInteractiveAuthentication.*/KbdInteractiveAuthentication no/' /etc/ssh/sshd_config
-sudo sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
+if [ "$(id -u)" -eq 0 ]; then
+    sudo sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config
+else
+    sudo sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin no/' /etc/ssh/sshd_config
+fi
 if command -v systemctl >/dev/null 2>&1; then
     sudo systemctl restart ssh || true
 else
     sudo service ssh restart || true
 fi
-echo "            (password authentication and root login disabled)"
+if [ "$(id -u)" -eq 0 ]; then
+    echo "            (password authentication disabled, root login enabled)"
+else
+    echo "            (password authentication and root login disabled)"
+fi
 
 echo ""
 echo "----------> Configure ufw"
