@@ -187,10 +187,9 @@ else
     echo "            (already installed)"
 fi
 ensure_line 'eval "$(~/.local/bin/mise activate bash)"' ~/.bashrc
-eval "$(~/.local/bin/mise activate bash)"
-mise use -g usage
+~/.local/bin/mise use -g usage
 mkdir -p ~/.local/share/bash-completion/completions/
-mise completion bash --include-bash-completion-lib > ~/.local/share/bash-completion/completions/mise
+~/.local/bin/mise completion bash --include-bash-completion-lib > ~/.local/share/bash-completion/completions/mise
 
 echo ""
 echo "----------> Setup complete!"
