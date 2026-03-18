@@ -133,7 +133,6 @@ echo ""
 echo "----------> Configure sshd"
 sudo sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication no/' /etc/ssh/sshd_config
 sudo sed -i 's/^#\?KbdInteractiveAuthentication.*/KbdInteractiveAuthentication no/' /etc/ssh/sshd_config
-sudo sed -i 's/^#\?UsePAM.*/UsePAM no/' /etc/ssh/sshd_config
 if [ "$(id -u)" -eq 0 ]; then
     sudo sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin yes/' /etc/ssh/sshd_config
 else
@@ -145,9 +144,9 @@ else
     sudo service ssh restart || true
 fi
 if [ "$(id -u)" -eq 0 ]; then
-    echo "            (password authentication and PAM disabled, root login enabled)"
+    echo "            (password authentication disabled, root login enabled)"
 else
-    echo "            (password authentication, PAM, and root login disabled)"
+    echo "            (password authentication and root login disabled)"
 fi
 
 echo ""
