@@ -5,7 +5,7 @@
 Creates a user, configures sudo, and sets up the environment:
 
 ```
-curl -fsSL https://raw.githubusercontent.com/supermomonga/minimal-dotfiles/master/install.sh | sh -s -- USERNAME
+curl -fsSL https://raw.githubusercontent.com/supermomonga/minimal-dotfiles/master/install.sh | bash -s -- USERNAME
 ```
 
 If no username is provided, defaults to `main`.
@@ -13,7 +13,7 @@ If no username is provided, defaults to `main`.
 ## Personal setup only (as existing user)
 
 ```
-curl -fsSL https://raw.githubusercontent.com/supermomonga/minimal-dotfiles/master/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/supermomonga/minimal-dotfiles/master/install.sh | bash
 ```
 
 ## Enable sudoer (as root)

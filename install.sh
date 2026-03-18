@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 set -e
 
 REPO_URL="https://raw.githubusercontent.com/supermomonga/minimal-dotfiles/master/install.sh"
@@ -60,7 +60,7 @@ if [ "$(id -u)" -eq 0 ]; then
             curl -fsSL "$REPO_URL" -o /tmp/_install.sh
         fi
         chmod +r /tmp/_install.sh
-        su - "$USERNAME" -c "sh /tmp/_install.sh"
+        su - "$USERNAME" -c "bash /tmp/_install.sh"
         rm -f /tmp/_install.sh
 
         echo ""
@@ -187,9 +187,10 @@ else
     echo "            (already installed)"
 fi
 ensure_line 'eval "$(~/.local/bin/mise activate bash)"' ~/.bashrc
-~/.local/bin/mise use -g usage
+eval "$(~/.local/bin/mise activate bash)"
+mise use -g usage
 mkdir -p ~/.local/share/bash-completion/completions/
-~/.local/bin/mise completion bash --include-bash-completion-lib > ~/.local/share/bash-completion/completions/mise
+mise completion bash --include-bash-completion-lib > ~/.local/share/bash-completion/completions/mise
 
 echo ""
 echo "----------> Setup complete!"
